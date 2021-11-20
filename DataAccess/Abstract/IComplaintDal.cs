@@ -1,5 +1,4 @@
 ﻿using Core.DataAccess;
-using Core.Entities.Concrete;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -9,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface ISysAdminDal: IEntityRepository<SysAdmin>
+    public interface IComplaintDal: IEntityRepository<Complaint>
     {
-        List<OperationClaim> GetClaims(SysAdmin sysAdmin);
     }
 }

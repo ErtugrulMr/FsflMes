@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -21,32 +24,98 @@ namespace Business.Concrete
             _studentDal = studentDal;
         }
 
+        [ValidationAspect(typeof(StudentValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult Add(Student student)
         {
-            _studentDal.Add(student);
-            return new SuccessResult(Messages.StudentCreatedSuccessfully);
+            if (!IsExists(student.SchoolNumber, student.NationalIdentityNumber))
+            {
+                _studentDal.Add(student);
+                return new SuccessResult(Messages.StudentCreatedSuccessfully);
+            }
+
+            return new ErrorResult(Messages.StudentAlreadyExists);
         }
 
+        [ValidationAspect(typeof(StudentValidator))]
         public IResult Delete(Student student)
         {
-            _studentDal.Delete(student);
-            return new SuccessResult(Messages.StudentDeletedSuccessfully);
+            var isExists = GetById(student.Id);
+            if (isExists != null)
+            {
+                _studentDal.Delete(student);
+                return new SuccessResult(Messages.StudentDeletedSuccessfully);
+            }
+            
+            return new ErrorResult(Messages.StudentNotFound);
         }
+
+        [ValidationAspect(typeof(StudentValidator))]
         public IResult Update(Student student)
         {
-            _studentDal.Update(student);
-            return new SuccessResult(Messages.StudentUpdatedSuccessfully);
+            var isExists = GetById(student.Id);
+            if (isExists != null)
+            {
+                _studentDal.Update(student);
+                return new SuccessResult(Messages.StudentUpdatedSuccessfully);
+            }
+
+            return new ErrorDataResult<Student>(Messages.StudentNotFound);
         }
+
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<List<Student>> GetAll()
         {
-            return new SuccessDataResult<List<Student>>(_studentDal.GetAll());
+            var result = _studentDal.GetAll();
+            if (result != null)
+            {
+                return new SuccessDataResult<List<Student>>(result);
+            }
+
+            return new ErrorDataResult<List<Student>>(Messages.NoStudentDataInDatabase);
         }
 
         public IDataResult<Student> GetById(int id)
         {
-            return new SuccessDataResult<Student>(_studentDal.Get(s => s.Id == id));
+            var result = _studentDal.Get(s => s.Id == id);
+            if(result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(Messages.StudentNotFound);
+        }
+        
+        public IDataResult<Student> GetBySchoolNumber(int schoolNumber)
+        {
+            var result = _studentDal.Get(s => s.SchoolNumber == schoolNumber);
+            if(result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(result, Messages.StudentNotFound);
+        }
+        
+        public IDataResult<Student> GetByNationalIdentityNumber(long nationalIdentityNumber)
+        {
+            var result = _studentDal.Get(s => s.NationalIdentityNumber == nationalIdentityNumber);
+            if (result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(result, Messages.StudentNotFound);
         }
 
+        private bool IsExists(int schoolNumber, long nationalIdentityNumber)
+        {
+            if (GetBySchoolNumber(schoolNumber).Success || GetByNationalIdentityNumber(nationalIdentityNumber).Success)
+            {
+                return true;
+            }
 
+            return false;
+        }
     }
 }

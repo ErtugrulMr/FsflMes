@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Entities.Concrete;
+using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace DataAccess.Concrete
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=MSI\SQLEXPRESS01;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Database=FsflMes;Trusted_Connection=true");
+            optionsBuilder.UseSqlServer(@"Server=MSI\SQLEXPRESS01;Database=FsflMes;Trusted_Connection=true");
         }
 
         public DbSet<Student> Students { get; set; }
@@ -21,5 +22,9 @@ namespace DataAccess.Concrete
         public DbSet<SchAdmin> SchAdmins { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Satisfaction> Satisfactions { get; set; }
+        public DbSet<Criticism> Criticisms { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
     }
 }

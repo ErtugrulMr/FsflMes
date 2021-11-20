@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities.Concrete;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace Business.Abstract
         IResult Update(SysAdmin sysAdmin);
         IDataResult<List<SysAdmin>> GetAll();
         IDataResult<SysAdmin> GetById(int id);
+        IDataResult<SysAdmin> GetByUserName(string userName);
+        List<OperationClaim> GetClaims(SysAdmin sysAdmin);
     }
 }

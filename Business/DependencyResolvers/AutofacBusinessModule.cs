@@ -36,9 +36,15 @@ namespace Business.DependencyResolvers.Autofac
             
             builder.RegisterType<SatisfactionManager>().As<ISatisfactionService>();
             builder.RegisterType<EfSatisfactionDal>().As<ISatisfactionDal>();
+            
+            builder.RegisterType<CriticismManager>().As<ICriticismService>();
+            builder.RegisterType<EfCriticismDal>().As<ICriticismDal>();
+            
+            builder.RegisterType<ComplaintManager>().As<IComplaintService>();
+            builder.RegisterType<EfComplaintDal>().As<IComplaintDal>();
 
-            //builder.RegisterType<AuthManager>().As<IAuthService>();
-            //builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

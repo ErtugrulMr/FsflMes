@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities.Concrete;
+using Core.Utilities.Persistance;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -14,15 +16,29 @@ namespace Business.Concrete
     public class SysAdminManager : ISysAdminService
     {
 
-        ISysAdminDal _sysAdminDal;
+        private ISysAdminDal _sysAdminDal;
+        private ISchAdminDal _schAdminDal;
 
-        public SysAdminManager(ISysAdminDal sysAdminDal)
+        public SysAdminManager(ISysAdminDal sysAdminDal, ISchAdminDal schAdminDal)
         {
             this._sysAdminDal = sysAdminDal;
+            this._schAdminDal = schAdminDal;
         }
 
         public IResult Add(SysAdmin sysAdmin)
         {
+            int id = 0;
+            bool isASuitableIdFound = false;
+            while (!isASuitableIdFound)
+            {
+                id = IdCreator.CreateId();
+                bool isExists = _schAdminDal.Get(sc => sc.Id == id)!=null && GetById(id)!=null;
+                if (!isExists)
+                {
+                    isASuitableIdFound = true;
+                }
+            }
+            sysAdmin.Id = id;
             _sysAdminDal.Add(sysAdmin);
             return new SuccessResult(Messages.SysAdminCreatedSuccessfully);
         }
@@ -51,6 +67,20 @@ namespace Business.Concrete
             return new SuccessDataResult<SysAdmin>(result);
         }
 
+        public IDataResult<SysAdmin> GetByUserName(string userName)
+        {
+            var result = _sysAdminDal.Get(s => s.UserName == userName);
+            if (result != null)
+            {
+                return new SuccessDataResult<SysAdmin>(result);
+            }
 
+            return new ErrorDataResult<SysAdmin>(Messages.SysAdminNotFound);
+        }
+
+        public List<OperationClaim> GetClaims(SysAdmin sysAdmin)
+        {
+            return _sysAdminDal.GetClaims(sysAdmin);
+        }
     }
 }
