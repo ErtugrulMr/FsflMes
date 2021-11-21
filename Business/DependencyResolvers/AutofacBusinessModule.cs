@@ -42,9 +42,14 @@ namespace Business.DependencyResolvers.Autofac
             
             builder.RegisterType<ComplaintManager>().As<IComplaintService>();
             builder.RegisterType<EfComplaintDal>().As<IComplaintDal>();
+            
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>();
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>();
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
+            builder.RegisterType<UserManager>().As<IUserService>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

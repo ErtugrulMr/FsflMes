@@ -17,5 +17,9 @@ namespace Business.Abstract
         IDataResult<SysAdmin> LoginSysAdmin(SysAdminDto sysAdminDto);
         IResult IsSysAdminExists(string userName);
         IDataResult<AccessToken> CreateAccessTokenForSysAdmin(SysAdmin sysAdmin);
+        IDataResult<SchAdmin> RegisterSchAdmin(SchAdminRegisterDto schAdminDto);
+        IDataResult<SchAdmin> LoginSchAdmin(SchAdminLoginDto schAdminDto);
+        IResult IsSchAdminExists(string userName);
+        IDataResult<AccessToken> CreateAccessTokenForSchAdmin(SchAdmin schAdmin);
     }
 }

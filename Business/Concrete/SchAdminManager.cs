@@ -47,7 +47,12 @@ namespace Business.Concrete
         public IDataResult<SchAdmin> GetById(int id)
         {
             var result = _schAdminDal.Get(s => s.Id == id);
-            return new SuccessDataResult<SchAdmin>(result);
+            if (result != null)
+            {
+                return new SuccessDataResult<SchAdmin>(result);
+            }
+            
+            return new ErrorDataResult<SchAdmin>(Messages.SchAdminNotFound);
         }
 
     }

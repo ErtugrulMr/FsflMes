@@ -50,6 +50,8 @@ namespace Business.Constants
         public static readonly string ComplaintDeletedSuccessfully = "Şikayet gönderisi başarıyla silindi.";
         public static readonly string ComplaintUpdatedSuccessfully = "Şikayet gönderisi başarıyla güncellendi.";
 
+        public static readonly string UserOperationClaimAdded = "Kullanıcı operation claimi oluşturuldu.";
+
 
 
         // Error Messages
@@ -63,6 +65,15 @@ namespace Business.Constants
         public static readonly string NoStudentDataInDatabase = "Öğrenci tablosunda hiçbir veri bulunamadı.";
 
         public static readonly string SysAdminNotFound = "Sistem yöneticisi bulunamadı.";
+        public static readonly string SysAdminAlreadyExists = "Sistem yöneticisi zaten mevcut.";
+        public static readonly string NoSysAdminDataInDatabase = "Sistem yöneticileri tablosunda hiçbir veri bulunamadı.";
+
+        public static readonly string UserOperationClaimAlreadyExists = "Kullanıcı operation claimi zaten mevcut.";
+
+        public static readonly string SchAdminNotFound = "Okul yöneticisi bulunamadı.";
+        public static readonly string SchAdminAlreadyExists = "Okul yöneticisi zaten mevcut";
+        public static readonly string NoSchAdminDataInDatabase = "Okul yöneticileri tablosunda hiçbir veri bulunamadı.";
+
 
         // Validation Error Messages
 

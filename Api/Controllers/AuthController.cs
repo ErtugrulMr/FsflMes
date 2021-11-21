@@ -52,5 +52,42 @@ namespace Api.Controllers
 
             return BadRequest(result.Message);
         }
+
+        [HttpPost("schAdminLogin")]
+        public ActionResult LoginSchAdmin(SchAdminLoginDto schAdminLoginDto)
+        {
+            var schAdminToLogin = _authService.LoginSchAdmin(schAdminLoginDto);
+            if (!schAdminToLogin.Success)
+            {
+                return BadRequest(schAdminToLogin.Message);
+            }
+
+            var result = _authService.CreateAccessTokenForSchAdmin(schAdminToLogin.Data);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("schAdminRegister")]
+        public ActionResult RegisterSchAdmin(SchAdminRegisterDto schAdminRegisterDto)
+        {
+            var isSchAdminExists = _authService.IsSchAdminExists(schAdminRegisterDto.UserName);
+            if (isSchAdminExists.Success)
+            {
+                return BadRequest(isSchAdminExists.Message);
+            }
+
+            var registerResult = _authService.RegisterSchAdmin(schAdminRegisterDto);
+            var result = _authService.CreateAccessTokenForSchAdmin(registerResult.Data);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.Message);
+        }
     }
 }

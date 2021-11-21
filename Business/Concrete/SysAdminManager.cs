@@ -64,7 +64,12 @@ namespace Business.Concrete
         public IDataResult<SysAdmin> GetById(int id)
         {
             var result = _sysAdminDal.Get(s => s.Id == id);
-            return new SuccessDataResult<SysAdmin>(result);
+            if (result != null)
+            {
+                return new SuccessDataResult<SysAdmin>(result);
+            }
+            
+            return new ErrorDataResult<SysAdmin>(Messages.SysAdminNotFound);
         }
 
         public IDataResult<SysAdmin> GetByUserName(string userName)

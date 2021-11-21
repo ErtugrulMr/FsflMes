@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities.Dtos
 {
-    public class SysAdminDto: IDto
+    public class SchAdminRegisterDto: IDto
     {
         public string UserName { get; set; }
         public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
