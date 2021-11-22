@@ -45,6 +45,10 @@ namespace Core.Extensions
                 httpContext.Response.StatusCode= (int)HttpStatusCode.Forbidden;
                 message = e.Message;
             }
+            else if (e.GetType() == typeof(DatabaseException))
+            {
+                message = e.Message;
+            }
 
             return httpContext.Response.WriteAsync(new ErrorDetails
             {

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Core.Entities.Concrete;
+using Core.Extensions;
 using Core.Utilities.Persistance;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -18,11 +19,13 @@ namespace Business.Concrete
 
         private ISysAdminDal _sysAdminDal;
         private ISchAdminDal _schAdminDal;
+        private IStudentDal _studentDal;
 
-        public UserManager(ISysAdminDal sysAdminDal, ISchAdminDal schAdminDal)
+        public UserManager(ISysAdminDal sysAdminDal, ISchAdminDal schAdminDal, IStudentDal studentDal)
         {
             this._sysAdminDal = sysAdminDal;
             this._schAdminDal = schAdminDal;
+            this._studentDal = studentDal;
         }
 
 
@@ -40,8 +43,7 @@ namespace Business.Concrete
             while (!isASuitableIdFound)
             {
                 id = IdCreator.CreateId();
-                bool isExists = GetSchAdminById(id).Success || GetSysAdminById(id).Success;
-                if (!isExists)
+                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
                 {
                     isASuitableIdFound = true;
                 }
@@ -128,8 +130,7 @@ namespace Business.Concrete
             while (!isASuitableIdFound)
             {
                 id = IdCreator.CreateId();
-                bool isExists = GetSchAdminById(id).Success || GetSysAdminById(id).Success;
-                if (!isExists)
+                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
                 {
                     isASuitableIdFound = true;
                 }
@@ -176,7 +177,7 @@ namespace Business.Concrete
 
         public IDataResult<SchAdmin> GetSchAdminById(int id)
         {
-            var result = _schAdminDal.Get(sys => sys.Id == id);
+            var result = _schAdminDal.Get(st => st.Id == id);
             if (result != null)
             {
                 return new SuccessDataResult<SchAdmin>(result);
@@ -187,7 +188,7 @@ namespace Business.Concrete
 
         public IDataResult<SchAdmin> GetSchAdminByUserName(string userName)
         {
-            var result = _schAdminDal.Get(sys => sys.UserName == userName);
+            var result = _schAdminDal.Get(st => st.UserName == userName);
             if (result != null)
             {
                 return new SuccessDataResult<SchAdmin>(result);
@@ -199,6 +200,94 @@ namespace Business.Concrete
         public List<OperationClaim> GetClaimsOfSchAdmin(SchAdmin schAdmin)
         {
             return _schAdminDal.GetClaims(schAdmin);
+        }
+
+
+        // Student Operations
+
+        public IResult AddStudent(Student student)
+        {
+            if (GetStudentById(student.Id).Success)
+            {
+                return new ErrorResult(Messages.StudentAlreadyExists);
+            }
+
+            int id = 0;
+            bool isASuitableIdFound = false;
+            while (!isASuitableIdFound)
+            {
+                id = IdCreator.CreateId();
+                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
+                {
+                    isASuitableIdFound = true;
+                }
+            }
+            student.Id = id;
+            student.Name = student.FirstName.Capitalize() + " " + student.LastName.Capitalize();
+            _studentDal.Add(student);
+            return new SuccessResult(Messages.StudentCreatedSuccessfully);
+        }
+
+        public IResult DeleteStudent(Student student)
+        {
+            var result = GetStudentById(student.Id);
+            if (result.Success)
+            {
+                _studentDal.Delete(student);
+                return new SuccessResult(Messages.StudentDeletedSuccessfully);
+            }
+
+            return new ErrorResult(Messages.StudentNotFound);
+        }
+
+        public IResult UpdateStudent(Student student)
+        {
+            var result = GetStudentById(student.Id);
+            if (result.Success)
+            {
+                _studentDal.Update(student);
+                return new SuccessResult(Messages.StudentUpdatedSuccessfully);
+            }
+
+            return new ErrorResult(Messages.StudentNotFound);
+        }
+
+        public IDataResult<List<Student>> GetAllStudents()
+        {
+            var result = _studentDal.GetAll();
+            if (result.Count > 0)
+            {
+                return new SuccessDataResult<List<Student>>(result);
+            }
+
+            return new ErrorDataResult<List<Student>>(Messages.NoStudentDataInDatabase);
+        }
+
+        public IDataResult<Student> GetStudentById(int id)
+        {
+            var result = _studentDal.Get(st => st.Id == id);
+            if (result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(Messages.StudentNotFound);
+        }
+
+        public IDataResult<Student> GetStudentByName(string name)
+        {
+            var result = _studentDal.Get(st => st.Name == name);
+            if (result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(Messages.StudentNotFound);
+        }
+
+        public List<OperationClaim> GetClaimsOfStudent(Student student)
+        {
+            return _studentDal.GetClaims(student);
         }
     }
 }

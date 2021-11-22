@@ -157,5 +157,70 @@ namespace Business.Concrete
 
             return new ErrorResult(Messages.SchAdminNotFound);
         }
+
+        [SecuredOperation("sysAdmin,student")]
+        public IDataResult<Student> RegisterStudent(StudentRegisterDto studentRegisterDto)
+        {
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(studentRegisterDto.Password, out passwordHash, out passwordSalt);
+            var student = new Student
+            {
+                UserName = studentRegisterDto.UserName,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Status = true,
+                FirstName = studentRegisterDto.FirstName,
+                LastName = studentRegisterDto.LastName
+            };
+
+            _userService.AddStudent(student);
+            var userOperationClaim = new UserOperationClaim
+            {
+                OperationClaimId = OperationClaimIds.studentId,
+                UserId = student.Id
+            };
+            var result = _userOperationClaimService.Add(userOperationClaim);
+            if (!result.Success)
+            {
+                return new ErrorDataResult<Student>(result.Message);
+            }
+
+            return new SuccessDataResult<Student>(student, Messages.StudentCreatedSuccessfully);
+        }
+
+        public IDataResult<Student> LoginStudent(StudentLoginDto studentLoginDto)
+        {
+            var studentToCheck = _userService.GetStudentByName(studentLoginDto.Name).Data;
+            if (studentToCheck == null)
+            {
+                return new ErrorDataResult<Student>(Messages.StudentNotFound);
+            }
+
+            if (!HashingHelper.VerifyPasswordHash(studentLoginDto.Password, studentToCheck.PasswordHash, studentToCheck.PasswordSalt))
+            {
+                return new ErrorDataResult<Student>(Messages.PasswordError);
+            }
+
+            return new SuccessDataResult<Student>(studentToCheck, Messages.SuccessfulLogin);
+        }
+
+        public IDataResult<AccessToken> CreateAccessTokenForStudent(Student student)
+        {
+            var claims = _userService.GetClaimsOfStudent(student);
+            var accessToken = _tokenHelper.CreateToken(student, claims);
+            return new SuccessDataResult<AccessToken>(accessToken, Messages.TokenCreated);
+        }
+
+        [SecuredOperation("sysAdmin,student")]
+        public IResult IsStudentExists(string userName)
+        {
+            var result = _userService.GetStudentByUserName(userName).Data;
+            if (result != null)
+            {
+                return new SuccessResult(Messages.StudentAlreadyExists);
+            }
+
+            return new ErrorResult(Messages.StudentNotFound);
+        }
     }
 }

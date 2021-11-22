@@ -5,21 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/management/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        public IStudentService _studentService;
+        public IUserService _userService;
 
-        public StudentsController(IStudentService studentService)
+        public StudentsController(IUserService userService)
         {
-            _studentService = studentService;
+            _userService = userService;
         }
 
         [HttpPost("add")]
         public IActionResult Add(Student student)
         {
-            var result = _studentService.Add(student);
+            var result = _userService.AddStudent(student);
             if (result.Success)
             {
                 return Ok(result);
@@ -30,7 +30,7 @@ namespace Api.Controllers
         [HttpPost("delete")]
         public IActionResult Delete(Student student)
         {
-            var result = _studentService.Delete(student);
+            var result = _userService.DeleteStudent(student);
             if (result.Success)
             {
                 return Ok(result);
@@ -41,7 +41,7 @@ namespace Api.Controllers
         [HttpPost("update")]
         public IActionResult Update(Student student)
         {
-            var result = _studentService.Update(student);
+            var result = _userService.UpdateStudent(student);
             if (result.Success)
             {
                 return Ok(result);
@@ -52,7 +52,7 @@ namespace Api.Controllers
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {
-            var result = _studentService.GetAll();
+            var result = _userService.GetAllStudents();
             if (result.Success)
             {
                 return Ok(result);
@@ -61,9 +61,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("getById")]
-        public IActionResult GetAll(int id)
+        public IActionResult GetById(int id)
         {
-            var result = _studentService.GetById(id);
+            var result = _userService.GetStudentById(id);
             if (result.Success) 
             { 
                 return Ok(result); 

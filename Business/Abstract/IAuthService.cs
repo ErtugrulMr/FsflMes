@@ -21,5 +21,9 @@ namespace Business.Abstract
         IDataResult<SchAdmin> LoginSchAdmin(SchAdminLoginDto schAdminDto);
         IResult IsSchAdminExists(string userName);
         IDataResult<AccessToken> CreateAccessTokenForSchAdmin(SchAdmin schAdmin);
+        IDataResult<Student> RegisterStudent(StudentRegisterDto studentDto);
+        IDataResult<Student> LoginStudent(StudentLoginDto studentDto);
+        IResult IsStudentExists(string userName);
+        IDataResult<AccessToken> CreateAccessTokenForStudent(Student student);
     }
 }
