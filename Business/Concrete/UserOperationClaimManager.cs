@@ -26,13 +26,8 @@ namespace Business.Concrete
 
         public IResult Add(UserOperationClaim userOperationClaim)
         {
-            if ((!_sysAdminService.GetById(userOperationClaim.UserId).Success) &&(_schAdminService.GetById(userOperationClaim.UserId).Success))
-            {
-                _userOperationClaimDal.Add(userOperationClaim);
-                return new SuccessResult(Messages.UserOperationClaimAdded);
-            }
-
-            return new ErrorResult(Messages.UserOperationClaimAlreadyExists);
+            _userOperationClaimDal.Add(userOperationClaim);
+            return new SuccessResult(Messages.UserOperationClaimAdded);
         }
 
         public IResult Delete(UserOperationClaim userOperationClaim)

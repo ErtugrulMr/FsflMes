@@ -60,7 +60,6 @@ namespace Core.Utilities.Security.JWT
             //.Net'de var olan bir sınıfa yeni metodlar eklenebilir.
             var claims = new List<Claim>();
             claims.AddNameIdentifier(user.Id.ToString());
-            claims.AddName(user.UserName);
             claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
 
             return claims;

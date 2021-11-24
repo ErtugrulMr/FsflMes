@@ -42,6 +42,7 @@ namespace Business.Abstract
         IDataResult<List<Student>> GetAllStudents();
         IDataResult<Student> GetStudentById(int id);
         IDataResult<Student> GetStudentByName(string name);
+        IDataResult<Student> GetStudentBySchoolNumber(int schoolNumber);
         List<OperationClaim> GetClaimsOfStudent(Student student);
     }
 }

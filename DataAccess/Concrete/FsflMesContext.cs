@@ -17,7 +17,6 @@ namespace DataAccess.Concrete
         }
 
         public DbSet<Student> Students { get; set; }
-        public DbSet<School> Schools { get; set; }
         public DbSet<SysAdmin> SysAdmins { get; set; }
         public DbSet<SchAdmin> SchAdmins { get; set; }
         public DbSet<Post> Posts { get; set; }

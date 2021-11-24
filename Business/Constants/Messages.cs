@@ -86,13 +86,9 @@ namespace Business.Constants
         public static readonly string NationalIdentityNumberMustBeElevenCharacters = "TC kimlik numarası 11 haneden oluşmalıdır.";
         public static readonly string NationalIdentityNumberCantBeEmpty = "TC kimlik numarası boş olamaz.";
 
-        public static readonly string FirstNameCantBeEmpty = "Ad boş olamaz.";
-        public static readonly string FirstNameTooShort = "Ad çok kısa.";
-        public static readonly string FirstNameTooLong = "Ad çok uzun";
-
-        public static readonly string LastNameCantBeEmpty = "Soyad boş olamaz.";
-        public static readonly string LastNameTooShort = "Soyad çok kısa.";
-        public static readonly string LastNameTooLong = "Soyad çok uzun.";
+        public static readonly string NameCantBeEmpty = "Ad boş olamaz.";
+        public static readonly string NameTooShort = "Ad çok kısa.";
+        public static readonly string NameTooLong = "Ad çok uzun";
         
     }
 }

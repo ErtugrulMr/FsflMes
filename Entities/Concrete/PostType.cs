@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class School: IEntity
+    public class PostType: IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

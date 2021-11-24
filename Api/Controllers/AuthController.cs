@@ -2,6 +2,7 @@
 using Entities.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Api.Controllers
 {
@@ -82,6 +83,43 @@ namespace Api.Controllers
 
             var registerResult = _authService.RegisterSchAdmin(schAdminRegisterDto);
             var result = _authService.CreateAccessTokenForSchAdmin(registerResult.Data);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("student/login")]
+        public ActionResult LoginStudent(StudentLoginDto studentLoginDto)
+        {
+            var studentToLogin = _authService.LoginStudent(studentLoginDto);
+            if (!studentToLogin.Success)
+            {
+                return BadRequest(studentToLogin.Message);
+            }
+
+            var result = _authService.CreateAccessTokenForStudent(studentToLogin.Data);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("student/register")]
+        public ActionResult RegisterStudent(StudentRegisterDto studentRegisterDto)
+        {
+            var isStudentExists = _authService.IsStudentExists(studentRegisterDto.Name);
+            if (isStudentExists.Success)
+            {
+                return BadRequest(isStudentExists.Message);
+            }
+
+            var registerResult = _authService.RegisterStudent(studentRegisterDto);
+            var result = _authService.CreateAccessTokenForStudent(registerResult.Data);
             if (result.Success)
             {
                 return Ok(result.Data);

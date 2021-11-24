@@ -9,6 +9,7 @@ using Entities.Concrete;
 using Entities.Dtos;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,19 +159,21 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SchAdminNotFound);
         }
 
-        [SecuredOperation("sysAdmin,student")]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<Student> RegisterStudent(StudentRegisterDto studentRegisterDto)
         {
             byte[] passwordHash, passwordSalt;
-            HashingHelper.CreatePasswordHash(studentRegisterDto.Password, out passwordHash, out passwordSalt);
+            string password = studentRegisterDto.NationalIdentityNumber.ToString().Substring(0,5); // Password will be first 6 characters of NationalIdentityNumber.
+            HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             var student = new Student
             {
-                UserName = studentRegisterDto.UserName,
+                ClassId = studentRegisterDto.ClassId,
+                SchoolNumber = studentRegisterDto.SchoolNumber,
+                Name = studentRegisterDto.Name,
+                NationalIdentityNumber = studentRegisterDto.NationalIdentityNumber,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                Status = true,
-                FirstName = studentRegisterDto.FirstName,
-                LastName = studentRegisterDto.LastName
+                Status = true
             };
 
             _userService.AddStudent(student);
@@ -190,11 +193,13 @@ namespace Business.Concrete
 
         public IDataResult<Student> LoginStudent(StudentLoginDto studentLoginDto)
         {
-            var studentToCheck = _userService.GetStudentByName(studentLoginDto.Name).Data;
-            if (studentToCheck == null)
+            var isStudentExists = _userService.GetStudentByName(studentLoginDto.Name).Data != null && _userService.GetStudentBySchoolNumber(studentLoginDto.SchoolNumber).Data != null;
+            if (!isStudentExists)
             {
                 return new ErrorDataResult<Student>(Messages.StudentNotFound);
             }
+
+            var studentToCheck = _userService.GetStudentByName(studentLoginDto.Name).Data;
 
             if (!HashingHelper.VerifyPasswordHash(studentLoginDto.Password, studentToCheck.PasswordHash, studentToCheck.PasswordSalt))
             {
@@ -211,10 +216,10 @@ namespace Business.Concrete
             return new SuccessDataResult<AccessToken>(accessToken, Messages.TokenCreated);
         }
 
-        [SecuredOperation("sysAdmin,student")]
-        public IResult IsStudentExists(string userName)
+        [SecuredOperation("sysAdmin")]
+        public IResult IsStudentExists(string name)
         {
-            var result = _userService.GetStudentByUserName(userName).Data;
+            var result = _userService.GetStudentByName(name).Data;
             if (result != null)
             {
                 return new SuccessResult(Messages.StudentAlreadyExists);

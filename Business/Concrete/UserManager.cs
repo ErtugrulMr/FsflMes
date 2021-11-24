@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Entities.Concrete;
 using Core.Extensions;
@@ -223,7 +224,6 @@ namespace Business.Concrete
                 }
             }
             student.Id = id;
-            student.Name = student.FirstName.Capitalize() + " " + student.LastName.Capitalize();
             _studentDal.Add(student);
             return new SuccessResult(Messages.StudentCreatedSuccessfully);
         }
@@ -252,6 +252,7 @@ namespace Business.Concrete
             return new ErrorResult(Messages.StudentNotFound);
         }
 
+        [SecuredOperation("sysAdmin,schAdmin,student")]
         public IDataResult<List<Student>> GetAllStudents()
         {
             var result = _studentDal.GetAll();
@@ -277,6 +278,17 @@ namespace Business.Concrete
         public IDataResult<Student> GetStudentByName(string name)
         {
             var result = _studentDal.Get(st => st.Name == name);
+            if (result != null)
+            {
+                return new SuccessDataResult<Student>(result);
+            }
+
+            return new ErrorDataResult<Student>(Messages.StudentNotFound);
+        }
+        
+        public IDataResult<Student> GetStudentBySchoolNumber(int schoolNumber)
+        {
+            var result = _studentDal.Get(st => st.SchoolNumber == schoolNumber);
             if (result != null)
             {
                 return new SuccessDataResult<Student>(result);

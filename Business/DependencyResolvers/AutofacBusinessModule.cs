@@ -22,9 +22,6 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<StudentManager>().As<IStudentService>();
             builder.RegisterType<EfStudentDal>().As<IStudentDal>();
             
-            builder.RegisterType<SchoolManager>().As<ISchoolService>();
-            builder.RegisterType<EfSchoolDal>().As<ISchoolDal>();
-            
             builder.RegisterType<SysAdminManager>().As<ISysAdminService>();
             builder.RegisterType<EfSysAdminDal>().As<ISysAdminDal>();
             
