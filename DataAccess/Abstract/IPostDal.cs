@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IPostDal: IEntityRepository<Post>
     {
-        //PostWithReportAndStudentDto GetPostDetails(int postId);
+        PostDetailsDto GetPostDetails(int postId);
     }
 }

@@ -3,6 +3,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,17 @@ namespace Business.Concrete
         {
             var result = _postDal.Get(s => s.Id == id);
             return new SuccessDataResult<Post>(result);
+        }
+
+        public IDataResult<PostDetailsDto> GetPostDetails(int id)
+        {
+            var result = _postDal.GetPostDetails(id);
+            if (result != null)
+            {
+                return new SuccessDataResult<PostDetailsDto>(result);
+            }
+
+            return new ErrorDataResult<PostDetailsDto>(result);
         }
     }
 }

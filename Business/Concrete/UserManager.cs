@@ -7,6 +7,7 @@ using Core.Utilities.Persistance;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -297,9 +298,44 @@ namespace Business.Concrete
             return new ErrorDataResult<Student>(Messages.StudentNotFound);
         }
 
+        public IDataResult<StudentDetailsDto> GetStudentDetails(int id)
+        {
+            var result = _studentDal.GetStudentDetails(id);
+            if (result != null)
+            {
+                return new SuccessDataResult<StudentDetailsDto>(result);
+            }
+
+            return new ErrorDataResult<StudentDetailsDto>(result);
+        }
+
         public List<OperationClaim> GetClaimsOfStudent(Student student)
         {
             return _studentDal.GetClaims(student);
+        }
+
+
+
+        // All Users Operations
+
+        public bool IsExistsForAll(int id)
+        {
+            if (GetSysAdminById(id).Success)
+            {
+                return true;
+            }
+            
+            if (GetSchAdminById(id).Success)
+            {
+                return true;
+            }
+            
+            if (GetStudentById(id).Success)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

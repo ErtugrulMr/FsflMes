@@ -20,9 +20,9 @@ namespace DataAccess.Concrete
         public DbSet<SysAdmin> SysAdmins { get; set; }
         public DbSet<SchAdmin> SchAdmins { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Satisfaction> Satisfactions { get; set; }
-        public DbSet<Criticism> Criticisms { get; set; }
-        public DbSet<Complaint> Complaints { get; set; }
+        public DbSet<PostType> PostTypes { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<SchoolClass> SchoolClasses { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
     }

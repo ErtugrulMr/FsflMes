@@ -3,6 +3,7 @@ using Core.Entities.Concrete;
 using Core.Extensions;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,28 @@ namespace DataAccess.Concrete
                 }
 
                 throw new DatabaseException("An error occured while getting claims.");
+            }
+        }
+
+        public StudentDetailsDto GetStudentDetails(int studentId)
+        {
+            using (var context = new FsflMesContext())
+            {
+                var result = from student in context.Students
+                             join schoolClass in context.SchoolClasses
+                             on student.ClassId equals schoolClass.Id
+                             where student.Id == studentId
+                             select new StudentDetailsDto
+                             {
+                                 Id = student.Id,
+                                 SchoolNumber = student.SchoolNumber,
+                                 StudentName = student.Name,
+                                 ClassName = schoolClass.Name,
+                                 NationalIdentityNumber = student.NationalIdentityNumber,
+                                 Status = student.Status,
+                             };
+
+                return result.FirstOrDefault();
             }
         }
     }

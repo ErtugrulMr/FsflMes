@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IComplaintDal: IEntityRepository<Complaint>
+    public interface ISchoolClassDal: IEntityRepository<SchoolClass>
     {
     }
 }

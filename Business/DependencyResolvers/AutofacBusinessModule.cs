@@ -18,27 +18,17 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-
-            builder.RegisterType<StudentManager>().As<IStudentService>();
             builder.RegisterType<EfStudentDal>().As<IStudentDal>();
             
-            builder.RegisterType<SysAdminManager>().As<ISysAdminService>();
             builder.RegisterType<EfSysAdminDal>().As<ISysAdminDal>();
             
-            builder.RegisterType<SchAdminManager>().As<ISchAdminService>();
             builder.RegisterType<EfSchAdminDal>().As<ISchAdminDal>();
             
             builder.RegisterType<PostManager>().As<IPostService>();
             builder.RegisterType<EfPostDal>().As<IPostDal>();
             
-            builder.RegisterType<SatisfactionManager>().As<ISatisfactionService>();
-            builder.RegisterType<EfSatisfactionDal>().As<ISatisfactionDal>();
-            
-            builder.RegisterType<CriticismManager>().As<ICriticismService>();
-            builder.RegisterType<EfCriticismDal>().As<ICriticismDal>();
-            
-            builder.RegisterType<ComplaintManager>().As<IComplaintService>();
-            builder.RegisterType<EfComplaintDal>().As<IComplaintDal>();
+            builder.RegisterType<ReportManager>().As<IReportService>();
+            builder.RegisterType<EfReportDal>().As<IReportDal>();
             
             builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>();
             builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>();

@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,11 @@ namespace Business.Abstract
         IDataResult<Student> GetStudentById(int id);
         IDataResult<Student> GetStudentByName(string name);
         IDataResult<Student> GetStudentBySchoolNumber(int schoolNumber);
+        IDataResult<StudentDetailsDto> GetStudentDetails(int id);
         List<OperationClaim> GetClaimsOfStudent(Student student);
+
+        // All Users Operations
+
+        bool IsExistsForAll(int id);
     }
 }

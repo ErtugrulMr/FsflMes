@@ -7,19 +7,19 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SatisfactionsController : ControllerBase
+    public class ReportsController : ControllerBase
     {
-        ISatisfactionService _satisfactionService;
+        IReportService _reportService;
 
-        public SatisfactionsController(ISatisfactionService satisfactionService)
+        public ReportsController(IReportService reportService)
         {
-            _satisfactionService = satisfactionService;
+            _reportService = reportService;
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Satisfaction satisfaction)
+        public IActionResult Add(Report report)
         {
-            var result = _satisfactionService.Add(satisfaction);
+            var result = _reportService.Add(report);
             if (result.Success)
             {
                 return Ok(result);
@@ -28,9 +28,9 @@ namespace Api.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete(Satisfaction satisfaction)
+        public IActionResult Delete(Report report)
         {
-            var result = _satisfactionService.Delete(satisfaction);
+            var result = _reportService.Delete(report);
             if (result.Success)
             {
                 return Ok(result);
@@ -39,9 +39,9 @@ namespace Api.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(Satisfaction satisfaction)
+        public IActionResult Update(Report report)
         {
-            var result = _satisfactionService.Update(satisfaction);
+            var result = _reportService.Update(report);
             if (result.Success)
             {
                 return Ok(result);
@@ -52,7 +52,7 @@ namespace Api.Controllers
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {
-            var result = _satisfactionService.GetAll();
+            var result = _reportService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -63,7 +63,7 @@ namespace Api.Controllers
         [HttpGet("getById")]
         public IActionResult GetById(int id)
         {
-            var result = _satisfactionService.GetById(id);
+            var result = _reportService.GetById(id);
             if (result.Success)
             {
                 return Ok(result);

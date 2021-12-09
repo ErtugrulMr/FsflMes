@@ -15,5 +15,7 @@ namespace Business.Abstract
         IResult Update(UserOperationClaim userOperationClaim);
         IDataResult<List<UserOperationClaim>> GetAll();
         IDataResult<UserOperationClaim> GetById(int id);
+        IDataResult<UserOperationClaim> GetByUserId(int id);
+        IDataResult<UserOperationClaim> GetByOperationClaimId(int id);
     }
 }

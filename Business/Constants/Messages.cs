@@ -38,19 +38,13 @@ namespace Business.Constants
         public static readonly string PostDeletedSuccessfully = "Gönderi başarıyla silindi.";
         public static readonly string PostUpdatedSuccessfully = "Gönderi başarıyla güncellendi.";
 
-        public static readonly string SatisfactionCreatedSuccessfully = "Memnuniyet gönderisi başarıyla oluşturuldu.";
-        public static readonly string SatisfactionDeletedSuccessfully = "Memnuniyet gönderisi başarıyla silindi.";
-        public static readonly string SatisfactionUpdatedSuccessfully = "Memnuniyet gönderisi başarıyla güncellendi.";
+        public static readonly string ReportCreatedSuccessfully = "Rapor başarıyla oluşturuldu.";
+        public static readonly string ReportDeletedSuccessfully = "Rapor başarıyla silindi.";
+        public static readonly string ReportUpdatedSuccessfully = "Rapor başarıyla güncellendi.";
 
-        public static readonly string CriticismCreatedSuccessfully = "Eleştiri gönderisi başarıyla oluşturuldu.";
-        public static readonly string CriticismDeletedSuccessfully = "Eleştiri gönderisi başarıyla silindi.";
-        public static readonly string CriticismUpdatedSuccessfully = "Eleştiri gönderisi başarıyla güncellendi.";
-
-        public static readonly string ComplaintCreatedSuccessfully = "Şikayet gönderisi başarıyla oluşturuldu.";
-        public static readonly string ComplaintDeletedSuccessfully = "Şikayet gönderisi başarıyla silindi.";
-        public static readonly string ComplaintUpdatedSuccessfully = "Şikayet gönderisi başarıyla güncellendi.";
-
-        public static readonly string UserOperationClaimAdded = "Kullanıcı operation claimi oluşturuldu.";
+        public static readonly string UserOperationClaimAdded = "Kullanıcı operation claimi başarıyla oluşturuldu.";
+        public static readonly string UserOperationClaimDeleted = "Kullanıcı operation claimi başarıyla silindi.";
+        public static readonly string UserOperationClaimUpdated = "Kullanıcı operation claimi başarıyla güncellendi.";
 
 
 
@@ -68,6 +62,7 @@ namespace Business.Constants
         public static readonly string SysAdminAlreadyExists = "Sistem yöneticisi zaten mevcut.";
         public static readonly string NoSysAdminDataInDatabase = "Sistem yöneticileri tablosunda hiçbir veri bulunamadı.";
 
+        public static readonly string UserOperationClaimNotFound = "Kullanıcı operation claimi bulunamadı.";
         public static readonly string UserOperationClaimAlreadyExists = "Kullanıcı operation claimi zaten mevcut.";
 
         public static readonly string SchAdminNotFound = "Okul yöneticisi bulunamadı.";
@@ -89,6 +84,5 @@ namespace Business.Constants
         public static readonly string NameCantBeEmpty = "Ad boş olamaz.";
         public static readonly string NameTooShort = "Ad çok kısa.";
         public static readonly string NameTooLong = "Ad çok uzun";
-        
     }
 }

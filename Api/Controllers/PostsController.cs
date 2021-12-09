@@ -70,5 +70,16 @@ namespace Api.Controllers
             }
             return BadRequest(result);
         }
+        
+        [HttpGet("getPostDetails")]
+        public IActionResult GetPostDetails(int id)
+        {
+            var result = _postService.GetPostDetails(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
