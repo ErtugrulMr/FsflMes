@@ -1,11 +1,11 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/reports")]
     [ApiController]
     public class ReportsController : ControllerBase
     {
@@ -49,7 +49,7 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAll")]
+        [HttpGet("get-all")]
         public IActionResult GetAll()
         {
             var result = _reportService.GetAll();
@@ -60,10 +60,22 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getById")]
+        [HttpGet("get-by-id")]
         public IActionResult GetById(int id)
         {
             var result = _reportService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [SecuredOperation("admin")]
+        [HttpGet("get-by-post-id")]
+        public IActionResult GetByPostId(int id)
+        {
+            var result = _reportService.GetByPostId(id);
             if (result.Success)
             {
                 return Ok(result);

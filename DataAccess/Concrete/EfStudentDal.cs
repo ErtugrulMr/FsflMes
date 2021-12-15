@@ -4,12 +4,8 @@ using Core.Extensions;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
@@ -45,7 +41,8 @@ namespace DataAccess.Concrete
                              {
                                  Id = student.Id,
                                  SchoolNumber = student.SchoolNumber,
-                                 StudentName = student.Name,
+                                 StudentFirstName = student.FirstName,
+                                 StudentLastName = student.LastName,
                                  ClassName = schoolClass.Name,
                                  NationalIdentityNumber = student.NationalIdentityNumber,
                                  Status = student.Status,

@@ -1,13 +1,4 @@
-﻿using Core.Entities.Concrete;
-using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.Constants
+﻿namespace Business.Constants
 {
     public class Messages
     {
@@ -22,10 +13,6 @@ namespace Business.Constants
         public static readonly string StudentDeletedSuccessfully = "Öğrenci başarıyla silindi.";
         public static readonly string StudentUpdatedSuccessfully = "Öğrenci başarıyla güncellendi.";
 
-        public static readonly string SchoolCreatedSuccessfully = "Okul başarıyla oluşturuldu.";
-        public static readonly string SchoolDeletedSuccessfully = "Okul başarıyla silindi.";
-        public static readonly string SchoolUpdatedSuccessfully = "Okul başarıyla güncellendi.";
-        
         public static readonly string SysAdminCreatedSuccessfully = "Sistem yöneticisi başarıyla oluşturuldu.";
         public static readonly string SysAdminDeletedSuccessfully = "Sistem yöneticisi başarıyla silindi.";
         public static readonly string SysAdminUpdatedSuccessfully = "Sistem yöneticisi başarıyla güncellendi.";
@@ -69,20 +56,64 @@ namespace Business.Constants
         public static readonly string SchAdminAlreadyExists = "Okul yöneticisi zaten mevcut";
         public static readonly string NoSchAdminDataInDatabase = "Okul yöneticileri tablosunda hiçbir veri bulunamadı.";
 
+        public static readonly string PostNotFound = "Gönderi bulunamadı.";
+        public static readonly string NoPostDataInDatabase = "Gönderi tablosunda hiçbir veri bulunamadı.";
+
+        public static readonly string ReportNotFound = "Rapor bulunamadı.";
+        public static readonly string NoReportDataInDatabase = "Raporlar tablosunda hiçbir veri bulunamadı.";
+
 
         // Validation Error Messages
 
         public static readonly string ClassIdCantBeEmpty = "Sınıf Id'si boş olamaz.";
-
-        public static readonly string SchoolIdCantBeEmpty = "Okul Id'si boş olamaz.";
 
         public static readonly string SchoolNumberCantBeEmpty = "Okul numarası boş olamaz.";
 
         public static readonly string NationalIdentityNumberMustBeElevenCharacters = "TC kimlik numarası 11 haneden oluşmalıdır.";
         public static readonly string NationalIdentityNumberCantBeEmpty = "TC kimlik numarası boş olamaz.";
 
-        public static readonly string NameCantBeEmpty = "Ad boş olamaz.";
-        public static readonly string NameTooShort = "Ad çok kısa.";
-        public static readonly string NameTooLong = "Ad çok uzun";
+        public static string StatusCantBeEmpty = "Statü boş olamaz.";
+
+        public static string UsernameCantBeEmpty = "Kullanıcı adı boş olamaz.";
+        public static string UsernameTooShort = "Kullanıcı adı çok kısa.";
+
+        public static string PasswordCantBeEmpty = "Parola boş olamaz.";
+        public static string PasswordTooShort = "Parola çok kısa.";
+        public static string UsernameTooLong = "Kullanıcı adı çok uzun";
+        public static string PasswordTooLong = "Parola çok uzun.";
+
+        public static string FirstNameCantBeEmpty = "Ad boş olamaz.";
+        public static string FirstNameTooShort = "Ad en az 2 karakterden oluşmalıdır.";
+        public static string FirstNameTooLong = "Ad en fazla 50 karakterden oluşmalıdır.";
+
+        public static string LastNameCantBeEmpty = "Soyad boş olamaz.";
+        public static string LastNameTooShort = "Soyad çok kısa.";
+        public static string LastNameTooLong = "Soyad çok uzun.";
+
+        public static string TypeIdCantBeEmpty = "Tip Id'si boş olamaz.";
+
+        public static string StudentIdCantBeEmpty = "Öğrenci Id'si boş olamaz.";
+
+        public static string TitleCantBeEmpty = "Başlık boş olamaz.";
+        public static string TitleTooShort = "Başlık çok kısa.";
+        public static string TitleTooLong = "Başlık çok uzun.";
+
+        public static string IsRepliedByAdminCantBeEmpty = "IsRepliedByAdmin alanı boş olamaz.";
+
+        public static string IsSolvedCantBeEmpty = "IsSolved alanı boş olamaz.";
+
+        public static string CreationDateCantBeEmpty = "Oluşturulma tarihi boş olamaz.";
+
+        public static string NameCantBeEmpty = "Ad boş olamaz.";
+
+        public static string PostIdCantBeEmpty = "Gönderi Id'si boş olamaz.";
+
+        public static string UserIdCantBeEmpty = "Kullanıcı Id'si boş olamaz.";
+
+        public static string IsFromStudentCantBeEmpty = "IsFromStudent alanı boş olamaz.";
+
+        public static string MessageCantBeEmpty = "Mesaj alanı boş olamaz.";
+        public static string MessageTooShort = "Mesaj çok kısa.";
+        public static string MessageTooLong = "Mesaj çok uzun.";
     }
 }

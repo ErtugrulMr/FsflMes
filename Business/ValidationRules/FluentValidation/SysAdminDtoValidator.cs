@@ -1,18 +1,20 @@
 ﻿using Business.Constants;
-using Entities.Concrete;
+using Entities.Dtos;
 using FluentValidation;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class SysAdminValidator: AbstractValidator<SysAdmin>
+    public class SysAdminDtoValidator: AbstractValidator<SysAdminDto>
     {
-        public SysAdminValidator()
+        public SysAdminDtoValidator()
         {
             RuleFor(s => s.UserName).NotNull().NotEmpty().WithMessage(Messages.UsernameCantBeEmpty);
             RuleFor(s => s.UserName).MinimumLength(4).WithMessage(Messages.UsernameTooShort);
             RuleFor(s => s.UserName).MaximumLength(50).WithMessage(Messages.UsernameTooLong);
 
-            RuleFor(s => s.Status).NotNull().NotEmpty().WithMessage(Messages.StatusCantBeEmpty);
+            RuleFor(s => s.Password).NotNull().NotEmpty().WithMessage(Messages.PasswordCantBeEmpty);
+            RuleFor(s => s.Password).MinimumLength(6).WithMessage(Messages.PasswordTooShort);
+            RuleFor(s => s.UserName).MaximumLength(50).WithMessage(Messages.PasswordTooLong);
         }
     }
 }

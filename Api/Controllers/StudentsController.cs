@@ -1,11 +1,10 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/management/[controller]")]
+    [Route("api/management/students")]
     [ApiController]
     public class StudentsController : ControllerBase
     {
@@ -14,17 +13,6 @@ namespace Api.Controllers
         public StudentsController(IUserService userService)
         {
             _userService = userService;
-        }
-
-        [HttpPost("add")]
-        public IActionResult Add(Student student)
-        {
-            var result = _userService.AddStudent(student);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
         }
 
         [HttpPost("delete")]
@@ -38,18 +26,7 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Student student)
-        {
-            var result = _userService.UpdateStudent(student);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
-        [HttpGet("getAll")]
+        [HttpGet("get-all")]
         public IActionResult GetAll()
         {
             var result = _userService.GetAllStudents();
@@ -60,7 +37,7 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getById")]
+        [HttpGet("get-by-id")]
         public IActionResult GetById(int id)
         {
             var result = _userService.GetStudentById(id);
@@ -71,8 +48,8 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getStudentDetails")]
-        public IActionResult GetStudentDetails(int id)
+        [HttpGet("get-details")]
+        public IActionResult GetDetails(int id)
         {
             var result = _userService.GetStudentDetails(id);
             if (result.Success)

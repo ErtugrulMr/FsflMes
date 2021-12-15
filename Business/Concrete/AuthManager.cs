@@ -1,18 +1,14 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -30,6 +26,7 @@ namespace Business.Concrete
             _userOperationClaimService = userOperationClaimService;
         }
 
+        [ValidationAspect(typeof(SysAdminDtoValidator))]
         [SecuredOperation("sysAdmin")]
         public IDataResult<SysAdmin> RegisterSysAdmin(SysAdminDto sysAdminDto)
         {
@@ -58,6 +55,7 @@ namespace Business.Concrete
             return new SuccessDataResult<SysAdmin>(sysAdmin, Messages.SysAdminCreatedSuccessfully);
         }
 
+        [ValidationAspect(typeof(SysAdminDtoValidator))]
         public IDataResult<SysAdmin> LoginSysAdmin(SysAdminDto sysAdminDto)
         {
             var sysAdminToCheck = _userService.GetSysAdminByUserName(sysAdminDto.UserName).Data;
@@ -74,6 +72,7 @@ namespace Business.Concrete
             return new SuccessDataResult<SysAdmin>(sysAdminToCheck, Messages.SuccessfulLogin);
         }
 
+        [ValidationAspect(typeof(SysAdminValidator))]
         public IDataResult<AccessToken> CreateAccessTokenForSysAdmin(SysAdmin sysAdmin)
         {
             var claims = _userService.GetClaimsOfSysAdmin(sysAdmin);
@@ -93,6 +92,7 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SysAdminNotFound);
         }
 
+        [ValidationAspect(typeof(SchAdminRegisterDtoValidator))]
         [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<SchAdmin> RegisterSchAdmin(SchAdminRegisterDto schAdminRegisterDto)
         {
@@ -124,6 +124,7 @@ namespace Business.Concrete
             return new SuccessDataResult<SchAdmin>(schAdmin, Messages.SchAdminCreatedSuccessfully);
         }
 
+        [ValidationAspect(typeof(SchAdminLoginDtoValidator))]
         public IDataResult<SchAdmin> LoginSchAdmin(SchAdminLoginDto schAdminLoginDto)
         {
             var schAdminToCheck = _userService.GetSchAdminByUserName(schAdminLoginDto.UserName).Data;
@@ -140,6 +141,7 @@ namespace Business.Concrete
             return new SuccessDataResult<SchAdmin>(schAdminToCheck, Messages.SuccessfulLogin);
         }
 
+        [ValidationAspect(typeof(SchAdminValidator))]
         public IDataResult<AccessToken> CreateAccessTokenForSchAdmin(SchAdmin schAdmin)
         {
             var claims = _userService.GetClaimsOfSchAdmin(schAdmin);
@@ -159,17 +161,19 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SchAdminNotFound);
         }
 
+        [ValidationAspect(typeof(StudentRegisterDtoValidator))]
         [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<Student> RegisterStudent(StudentRegisterDto studentRegisterDto)
         {
             byte[] passwordHash, passwordSalt;
-            string password = studentRegisterDto.NationalIdentityNumber.ToString().Substring(0,5); // Password will be first 6 characters of NationalIdentityNumber.
+            string password = studentRegisterDto.NationalIdentityNumber.ToString().Substring(0,6); // Password will be first 6 characters of NationalIdentityNumber.
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             var student = new Student
             {
                 ClassId = studentRegisterDto.ClassId,
                 SchoolNumber = studentRegisterDto.SchoolNumber,
-                Name = studentRegisterDto.Name,
+                FirstName = studentRegisterDto.FirstName,
+                LastName = studentRegisterDto.LastName,
                 NationalIdentityNumber = studentRegisterDto.NationalIdentityNumber,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
@@ -191,6 +195,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Student>(student, Messages.StudentCreatedSuccessfully);
         }
 
+        [ValidationAspect(typeof(StudentLoginDtoValidator))]
         public IDataResult<Student> LoginStudent(StudentLoginDto studentLoginDto)
         {
             var isStudentExists = _userService.GetStudentByName(studentLoginDto.Name).Data != null && _userService.GetStudentBySchoolNumber(studentLoginDto.SchoolNumber).Data != null;
@@ -209,6 +214,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Student>(studentToCheck, Messages.SuccessfulLogin);
         }
 
+        [ValidationAspect(typeof(StudentValidator))]
         public IDataResult<AccessToken> CreateAccessTokenForStudent(Student student)
         {
             var claims = _userService.GetClaimsOfStudent(student);
@@ -216,7 +222,7 @@ namespace Business.Concrete
             return new SuccessDataResult<AccessToken>(accessToken, Messages.TokenCreated);
         }
 
-        [SecuredOperation("sysAdmin")]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult IsStudentExists(string name)
         {
             var result = _userService.GetStudentByName(name).Data;

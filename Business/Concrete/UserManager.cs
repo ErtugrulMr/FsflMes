@@ -2,17 +2,17 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Entities.Concrete;
-using Core.Extensions;
 using Core.Utilities.Persistance;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
+using Core.Aspects.Autofac.Validation;
 
 namespace Business.Concrete
 {
@@ -33,9 +33,14 @@ namespace Business.Concrete
 
         // SysAdmin Operations
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SysAdminValidator))]
+        [SecuredOperation("sysAdmin")]
         public IResult AddSysAdmin(SysAdmin sysAdmin)
         {
-            if (GetSysAdminById(sysAdmin.Id).Success)
+            if (GetSysAdminByUserName(sysAdmin.UserName).Success)
             {
                 return new ErrorResult(Messages.SysAdminAlreadyExists);
             }
@@ -45,7 +50,7 @@ namespace Business.Concrete
             while (!isASuitableIdFound)
             {
                 id = IdCreator.CreateId();
-                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
+                if (!IsExistsForAll(id))
                 {
                     isASuitableIdFound = true;
                 }
@@ -55,6 +60,11 @@ namespace Business.Concrete
             return new SuccessResult(Messages.SysAdminCreatedSuccessfully);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SysAdminValidator))]
+        [SecuredOperation("sysAdmin")]
         public IResult DeleteSysAdmin(SysAdmin sysAdmin)
         {
             var result = GetSysAdminById(sysAdmin.Id);
@@ -67,6 +77,11 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SysAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SysAdminValidator))]
+        [SecuredOperation("sysAdmin")]
         public IResult UpdateSysAdmin(SysAdmin sysAdmin)
         {
             var result = GetSysAdminById(sysAdmin.Id);
@@ -79,6 +94,9 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SysAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin")]
         public IDataResult<List<SysAdmin>> GetAllSysAdmins()
         {
             var result = _sysAdminDal.GetAll();
@@ -90,6 +108,9 @@ namespace Business.Concrete
             return new ErrorDataResult<List<SysAdmin>>(Messages.NoSysAdminDataInDatabase);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin")]
         public IDataResult<SysAdmin> GetSysAdminById(int id)
         {
             var result = _sysAdminDal.Get(sys => sys.Id == id);
@@ -101,6 +122,9 @@ namespace Business.Concrete
             return new ErrorDataResult<SysAdmin>(Messages.SysAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin")]
         public IDataResult<SysAdmin> GetSysAdminByUserName(string userName)
         {
             var result = _sysAdminDal.Get(sys => sys.UserName == userName);
@@ -112,6 +136,9 @@ namespace Business.Concrete
             return new ErrorDataResult<SysAdmin>(Messages.SysAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin")]
         public List<OperationClaim> GetClaimsOfSysAdmin(SysAdmin sysAdmin)
         {
             return _sysAdminDal.GetClaims(sysAdmin);
@@ -120,6 +147,11 @@ namespace Business.Concrete
 
         // SchAdmin Operations
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SchAdminValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult AddSchAdmin(SchAdmin schAdmin)
         {
             if (GetSchAdminById(schAdmin.Id).Success)
@@ -132,7 +164,7 @@ namespace Business.Concrete
             while (!isASuitableIdFound)
             {
                 id = IdCreator.CreateId();
-                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
+                if (!IsExistsForAll(id))
                 {
                     isASuitableIdFound = true;
                 }
@@ -142,6 +174,11 @@ namespace Business.Concrete
             return new SuccessResult(Messages.SchAdminCreatedSuccessfully);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SchAdminValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult DeleteSchAdmin(SchAdmin schAdmin)
         {
             var result = GetSchAdminById(schAdmin.Id);
@@ -154,6 +191,11 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SchAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(SchAdminValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult UpdateSchAdmin(SchAdmin schAdmin)
         {
             var result = GetSchAdminById(schAdmin.Id);
@@ -166,6 +208,9 @@ namespace Business.Concrete
             return new ErrorResult(Messages.SchAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<List<SchAdmin>> GetAllSchAdmins()
         {
             var result = _schAdminDal.GetAll();
@@ -177,6 +222,9 @@ namespace Business.Concrete
             return new ErrorDataResult<List<SchAdmin>>(Messages.NoSchAdminDataInDatabase);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<SchAdmin> GetSchAdminById(int id)
         {
             var result = _schAdminDal.Get(st => st.Id == id);
@@ -188,6 +236,9 @@ namespace Business.Concrete
             return new ErrorDataResult<SchAdmin>(Messages.SchAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<SchAdmin> GetSchAdminByUserName(string userName)
         {
             var result = _schAdminDal.Get(st => st.UserName == userName);
@@ -199,6 +250,9 @@ namespace Business.Concrete
             return new ErrorDataResult<SchAdmin>(Messages.SchAdminNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [CacheAspect(30)]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public List<OperationClaim> GetClaimsOfSchAdmin(SchAdmin schAdmin)
         {
             return _schAdminDal.GetClaims(schAdmin);
@@ -207,6 +261,11 @@ namespace Business.Concrete
 
         // Student Operations
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult AddStudent(Student student)
         {
             if (GetStudentById(student.Id).Success)
@@ -219,7 +278,7 @@ namespace Business.Concrete
             while (!isASuitableIdFound)
             {
                 id = IdCreator.CreateId();
-                if (!(GetStudentById(id).Success || GetSchAdminById(id).Success || GetSysAdminById(id).Success))
+                if (!IsExistsForAll(id))
                 {
                     isASuitableIdFound = true;
                 }
@@ -229,6 +288,11 @@ namespace Business.Concrete
             return new SuccessResult(Messages.StudentCreatedSuccessfully);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IResult DeleteStudent(Student student)
         {
             var result = GetStudentById(student.Id);
@@ -241,19 +305,11 @@ namespace Business.Concrete
             return new ErrorResult(Messages.StudentNotFound);
         }
 
-        public IResult UpdateStudent(Student student)
-        {
-            var result = GetStudentById(student.Id);
-            if (result.Success)
-            {
-                _studentDal.Update(student);
-                return new SuccessResult(Messages.StudentUpdatedSuccessfully);
-            }
-
-            return new ErrorResult(Messages.StudentNotFound);
-        }
-
-        [SecuredOperation("sysAdmin,schAdmin,student")]
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
+        [SecuredOperation("sysAdmin,schAdmin")]
         public IDataResult<List<Student>> GetAllStudents()
         {
             var result = _studentDal.GetAll();
@@ -265,6 +321,10 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Student>>(Messages.NoStudentDataInDatabase);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
         public IDataResult<Student> GetStudentById(int id)
         {
             var result = _studentDal.Get(st => st.Id == id);
@@ -276,9 +336,13 @@ namespace Business.Concrete
             return new ErrorDataResult<Student>(Messages.StudentNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
         public IDataResult<Student> GetStudentByName(string name)
         {
-            var result = _studentDal.Get(st => st.Name == name);
+            var result = _studentDal.Get(st => st.FirstName + " " + st.LastName == name);
             if (result != null)
             {
                 return new SuccessDataResult<Student>(result);
@@ -286,7 +350,11 @@ namespace Business.Concrete
 
             return new ErrorDataResult<Student>(Messages.StudentNotFound);
         }
-        
+
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
         public IDataResult<Student> GetStudentBySchoolNumber(int schoolNumber)
         {
             var result = _studentDal.Get(st => st.SchoolNumber == schoolNumber);
@@ -298,6 +366,11 @@ namespace Business.Concrete
             return new ErrorDataResult<Student>(Messages.StudentNotFound);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
+        [SecuredOperation("sysAdmin,schAdmin,student")]
         public IDataResult<StudentDetailsDto> GetStudentDetails(int id)
         {
             var result = _studentDal.GetStudentDetails(id);
@@ -309,6 +382,10 @@ namespace Business.Concrete
             return new ErrorDataResult<StudentDetailsDto>(result);
         }
 
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(StudentValidator))]
         public List<OperationClaim> GetClaimsOfStudent(Student student)
         {
             return _studentDal.GetClaims(student);

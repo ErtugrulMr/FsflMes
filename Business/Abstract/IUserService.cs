@@ -2,11 +2,7 @@
 using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
@@ -39,7 +35,6 @@ namespace Business.Abstract
 
         IResult AddStudent(Student student);
         IResult DeleteStudent(Student student);
-        IResult UpdateStudent(Student student);
         IDataResult<List<Student>> GetAllStudents();
         IDataResult<Student> GetStudentById(int id);
         IDataResult<Student> GetStudentByName(string name);

@@ -1,11 +1,10 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/posts")]
     [ApiController]
     public class PostsController : ControllerBase
     {
@@ -49,10 +48,21 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getAll")]
-        public IActionResult GetAll()
+        [HttpGet("get-all")]
+        public IActionResult GetAll(string cd = null, string sd = null)
         {
-            var result = _postService.GetAll();
+            var result = _postService.GetAll(cd,sd);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
+        [HttpGet("get-solveds")]
+        public IActionResult GetSolveds(string cd = null, string sd = null)
+        {
+            var result = _postService.GetSolveds(cd,sd);
             if (result.Success)
             {
                 return Ok(result);
@@ -60,8 +70,19 @@ namespace Api.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getById")]
-        public IActionResult GetAll(int id)
+        [HttpGet("get-not-solveds")]
+        public IActionResult GetNotSolveds(string cd = null, string sd = null)
+        {
+            var result = _postService.GetNotSolveds(cd, sd);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("get-by-id")]
+        public IActionResult GetById(int id)
         {
             var result = _postService.GetById(id);
             if (result.Success)
@@ -71,8 +92,30 @@ namespace Api.Controllers
             return BadRequest(result);
         }
         
-        [HttpGet("getPostDetails")]
-        public IActionResult GetPostDetails(int id)
+        [HttpGet("get-all-by-type-id")]
+        public IActionResult GetAllByTypeId(int id, string cd = null, string sd = null)
+        {
+            var result = _postService.GetAllByTypeId(id, cd, sd);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
+        [HttpGet("get-all-by-student-id")]
+        public IActionResult GetAllByStudentId(int id, string cd = null, string sd = null)
+        {
+            var result = _postService.GetAllByStudentId(id, cd, sd);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
+        [HttpGet("get-details")]
+        public IActionResult GetDetails(int id)
         {
             var result = _postService.GetPostDetails(id);
             if (result.Success)

@@ -1,12 +1,10 @@
 ﻿using Business.Abstract;
 using Entities.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Api.Controllers
 {
-    [Route("api/management/[controller]")]
+    [Route("api/management/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,7 +15,7 @@ namespace Api.Controllers
             _authService = authService;
         }
 
-        [HttpPost("sysAdminLogin")]
+        [HttpPost("login/sys-admin")]
         public ActionResult LoginSysAdmin(SysAdminDto sysAdminDto)
         {
             var sysAdminToLogin = _authService.LoginSysAdmin(sysAdminDto);
@@ -35,7 +33,7 @@ namespace Api.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("sysAdminRegister")]
+        [HttpPost("register/sys-admin")]
         public ActionResult RegisterSysAdmin(SysAdminDto sysAdminDto)
         {
             var isSysAdminExists = _authService.IsSysAdminExists(sysAdminDto.UserName);
@@ -54,7 +52,7 @@ namespace Api.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("schAdminLogin")]
+        [HttpPost("login/sch-admin")]
         public ActionResult LoginSchAdmin(SchAdminLoginDto schAdminLoginDto)
         {
             var schAdminToLogin = _authService.LoginSchAdmin(schAdminLoginDto);
@@ -72,7 +70,7 @@ namespace Api.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("schAdminRegister")]
+        [HttpPost("register/sch-admin")]
         public ActionResult RegisterSchAdmin(SchAdminRegisterDto schAdminRegisterDto)
         {
             var isSchAdminExists = _authService.IsSchAdminExists(schAdminRegisterDto.UserName);
@@ -91,7 +89,7 @@ namespace Api.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("student/login")]
+        [HttpPost("login/student")]
         public ActionResult LoginStudent(StudentLoginDto studentLoginDto)
         {
             var studentToLogin = _authService.LoginStudent(studentLoginDto);
@@ -109,10 +107,10 @@ namespace Api.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("student/register")]
+        [HttpPost("register/student")]
         public ActionResult RegisterStudent(StudentRegisterDto studentRegisterDto)
         {
-            var isStudentExists = _authService.IsStudentExists(studentRegisterDto.Name);
+            var isStudentExists = _authService.IsStudentExists(studentRegisterDto.FirstName + " " + studentRegisterDto.LastName);
             if (isStudentExists.Success)
             {
                 return BadRequest(isStudentExists.Message);
